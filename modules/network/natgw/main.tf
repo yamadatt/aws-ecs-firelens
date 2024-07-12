@@ -3,7 +3,7 @@
 ###########################################
 
 resource "aws_eip" "eip" {
-  domain = "vpc"  // VPC内でEIPを使用（vpc = trueが使用できなくなるので代わりにこの記述）
+  domain = "vpc" // VPC内でEIPを使用（vpc = trueが使用できなくなるので代わりにこの記述）
   tags = {
     Name = "${var.env}-${var.name_prefix}-ElasticIP-For-NATGW"
   }

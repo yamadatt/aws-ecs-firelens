@@ -83,7 +83,13 @@ resource "aws_iam_policy" "ecs_task" {
           "logs:PutLogEvents",
           "logs:CreateLogGroup",
           "logs:DescribeLogGroups",
-          "logs:DescribeLogStreams"
+          "logs:DescribeLogStreams",
+          "s3:GetObject",
+          "s3:GetBucketLocation",
+          "s3:PutObject",
+          "s3:AbortMultipartUpload",
+          "s3:DeleteObject",
+          "firehose:PutRecordBatch"
         ],
         "Effect" : "Allow",
         "Resource" : [

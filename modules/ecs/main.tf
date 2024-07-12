@@ -43,24 +43,24 @@ resource "aws_ecs_task_definition" "this" {
       ]
     },
     {
-        name = "log_router",
-        image = "449671225256.dkr.ecr.ap-northeast-1.amazonaws.com/stag-yamada-fluentbit:latest",
-        cpu = 0,
-        memoryReservation = 50,
-        portMappings = [],
-        essential = true,
-        logConfiguration = {
-            logDriver = "awslogs", # fluentbit自体のログはCloudWatch logsに出力
-            options = {
-                awslogs-create-group = "true",
-                awslogs-group = "/ecs/${var.env}-${var.name_prefix}-fluentlog",
-                awslogs-region = "ap-northeast-1",
-                awslogs-stream-prefix = "ecs"
-            },
+      name              = "log_router",
+      image             = "449671225256.dkr.ecr.ap-northeast-1.amazonaws.com/stag-yamada-fluentbit:latest",
+      cpu               = 0,
+      memoryReservation = 50,
+      portMappings      = [],
+      essential         = true,
+      logConfiguration = {
+        logDriver = "awslogs", # fluentbit自体のログはCloudWatch logsに出力
+        options = {
+          awslogs-create-group  = "true",
+          awslogs-group         = "/ecs/${var.env}-${var.name_prefix}-fluentlog",
+          awslogs-region        = "ap-northeast-1",
+          awslogs-stream-prefix = "ecs"
         },
-        firelensConfiguration = {
-            type = "fluentbit"
-        }
+      },
+      firelensConfiguration = {
+        type = "fluentbit"
+      }
     }
 
 

@@ -20,7 +20,7 @@ data "aws_caller_identity" "current" {}
 data "aws_elb_service_account" "main" {}
 
 resource "aws_s3_bucket" "alb_logs" {
-  bucket = "${var.env}-${var.name_prefix}-alb-logs"
+  bucket        = "${var.env}-${var.name_prefix}-alb-logs"
   force_destroy = true
 }
 
