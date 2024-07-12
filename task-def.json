@@ -1,0 +1,67 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "nginx",
+      "image": "public.ecr.aws/nginx/nginx:stable-alpine3.19-slim",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "logConfiguration": {
+        "logDriver": "awsfirelens",
+        "options": {
+          "Name": "cloudwatch_logs",
+          "region": "ap-northeast-1",
+          "log_group_name": "stag-yamada-nginx",
+          "log_stream_prefix": "firelens" ,
+          "auto_create_group": "true"
+        }
+      },
+      "systemControls": []
+    },
+    {
+      "name": "log_router",
+      "image": "449671225256.dkr.ecr.ap-northeast-1.amazonaws.com/stag-yamada-fluentbit:latest",
+      "cpu": 0,
+      "memoryReservation": 512,
+      "portMappings": [],
+      "essential": true,
+      "environment": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "user": "0",
+      "firelensConfiguration": {
+        "type": "fluentbit"
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/stag-yamada-fluentlog",
+          "awslogs-create-group": "true",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "systemControls": []   
+     }
+  ],
+  "family": "stag-yamada-nginx-def",
+  "taskRoleArn": "arn:aws:iam::449671225256:role/ecsTaskRole-stag-yamada",
+  "executionRoleArn": "arn:aws:iam::449671225256:role/ecsTasExecRole",
+  "networkMode": "awsvpc",
+  "volumes": [],
+  "placementConstraints": [],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512"
+}
