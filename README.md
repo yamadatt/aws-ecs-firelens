@@ -1,6 +1,6 @@
 ## このリポジトリは
 
-Firelensを素振りするためのリポジトリ。
+FirelensとFirehoseを素振りするためのリポジトリ。
 
 ## 構成
 
@@ -23,14 +23,11 @@ nginxとfirelensを同一タスクで動かし、nginxのログをfirelensでclo
 
 動かない場合は、コードを書き換える。特にS3はバケット名が一意となる必要がある。
 
-なお、GitHubActionsは試行錯誤のスピードが遅くなるので、使ってない。
-
 ## extra.confをs3にアップロードする
 
 ```bash
 aws s3 cp extra.conf s3://fluent-bit-yamada
 ```
-
 ## タスク定義の登録
 
 ```bash
@@ -44,11 +41,3 @@ aws ecs update-service --cluster stag-yamada-ecs --service stag-yamada-nginx-ser
 ```
 
 
-## イマイチわかっていないこと
-
-- 初回起動時にCloudWatchLogsでロググループを作れないと言われる。暫定で手で作っている。IAMに定義を入れているとは思うのだけど。
-- S3への出力はタイムラグがある。15分ぐらいのラグ（感覚）。
-
-## 改善ポイント
-
-terraformのタスクと```task-def.json```の乖離を解消する。
