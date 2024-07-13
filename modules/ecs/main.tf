@@ -27,12 +27,7 @@ resource "aws_ecs_task_definition" "this" {
 
       LogConfiguration = {
         LogDriver = "awsfirelens"
-        Options = {
-          awslogs-create-group  = "true"
-          awslogs-group         = "/ecs/${var.env}-${var.name_prefix}-nginx"
-          awslogs-region        = "ap-northeast-1"
-          awslogs-stream-prefix = "ecs"
-        }
+        Options = { }
       }
       essential = true
       portMappings = [
@@ -78,9 +73,6 @@ resource "aws_ecs_task_definition" "this" {
 
 }
 
-# data "aws_ecs_task_definition" "this" {
-#   task_definition = aws_ecs_task_definition.this.family
-# }
 
 resource "aws_ecs_service" "this" {
   name                   = "${var.env}-${var.name_prefix}-nginx-service"
