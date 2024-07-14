@@ -100,7 +100,6 @@ module "alb" {
   subnet_1a_id = module.subnet.subnet_alb_1a_id
   subnet_1b_id = module.subnet.subnet_alb_1b_id
   vpc_id       = module.vpc.vpc_id
-
 }
 
 module "ecr" {
@@ -125,4 +124,9 @@ module "ecs" {
   backend_desired_count       = 1
 }
 
-
+module "firehose" {
+  source       = "./modules/firehose"
+  env          = local.env
+  name_prefix  = local.name_prefix
+  firehose_role_arn = module.iam_role.firehose_role_arn
+}

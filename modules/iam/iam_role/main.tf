@@ -109,3 +109,74 @@ resource "aws_iam_role_policy_attachment" "ecs_task_attach" {
   policy_arn = aws_iam_policy.ecs_task.arn
   role       = aws_iam_role.ecs_task_role.name
 }
+
+
+# firehoseのロールを定義
+# cloudwatchからfirehoseのロールとfirehoseからS3に出力するロールは分けたほうが良いと思う。
+# firehose_roleに2つ定義していて、若干見苦しい。
+# だが、今回は簡略化のため同じロールを使っている。（動くことを優先した）
+
+resource "aws_iam_role" "firehose_role" {
+  name = "${var.env}-${var.name_prefix}-firehose_delivery_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "firehose.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      },
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "logs.ap-northeast-1.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+        "Condition" : {
+          "StringLike" : {
+            "aws:SourceArn" : "arn:aws:logs:ap-northeast-1:449671225256:*"
+          }
+        }
+      }
+    ]
+  })
+}
+
+# firehoseのロールにポリシーを割り当てる
+resource "aws_iam_role_policy_attachment" "firehose_policy_attach" {
+  policy_arn = aws_iam_policy.firehose_policy.arn
+  role       = aws_iam_role.firehose_role.name
+}
+
+resource "aws_iam_policy" "firehose_policy" {
+  name = "${var.env}-${var.name_prefix}-firehose_firehose_policy"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:AbortMultipartUpload",
+          "s3:GetBucketLocation",
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:ListBucketMultipartUploads",
+          "s3:PutObject",
+          "logs:CreateLogStream",
+          "logs:CreateLogGroup",
+          "logs:DescribeLogGroups",
+          "logs:DescribeLogStreams",
+          "logs:PutLogEvents",
+          "logs:PutRetentionPolicy",
+          "firehose:PutRecord"
+        ]
+        Resource = [
+          "*"
+        ]
+      }
+    ]
+  })
+}
