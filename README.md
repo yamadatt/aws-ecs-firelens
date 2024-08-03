@@ -22,7 +22,7 @@ firelensとfirehoseを素振りするためのリポジトリ。
 
 ![](figure/run_1616362_1722651979160.png)
 
-PlurarithはKinesys関連のサービスが表示されない。
+PlurarithはKinesis関連のサービスが表示されない。
 
 ### 2.2. やっていること
 
