@@ -13,7 +13,7 @@ resource "aws_kinesis_firehose_delivery_stream" "cloudwatch_to_s3_firehose" {
   destination = "extended_s3"
 
   extended_s3_configuration {
-    role_arn   = "${var.firehose_role_arn}"
+    role_arn   = var.firehose_role_arn
     bucket_arn = aws_s3_bucket.logs_bucket.arn
 
     buffering_interval = 300    # バッファの時間間隔（秒）
@@ -33,6 +33,6 @@ resource "aws_cloudwatch_log_subscription_filter" "log_subscription_filter" {
   log_group_name  = "/ecs/${var.env}-${var.name_prefix}-fluentlog"
   filter_pattern  = ""
   destination_arn = aws_kinesis_firehose_delivery_stream.cloudwatch_to_s3_firehose.arn
-  role_arn        = "${var.firehose_role_arn}"
+  role_arn        = var.firehose_role_arn
 
 }

@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "this" {
   memory                   = 512
   task_role_arn            = var.ecs_task_iam_role_arn
   execution_role_arn       = var.ecs_task_iam_role_exec_arn
-  track_latest = true
+  track_latest             = true
   container_definitions = jsonencode([
     {
       name  = "nginx"
@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "this" {
 
       LogConfiguration = {
         LogDriver = "awsfirelens"
-        Options = { }
+        Options   = {}
       }
       essential = true
       portMappings = [
@@ -44,13 +44,13 @@ resource "aws_ecs_task_definition" "this" {
       memoryReservation = 50,
       portMappings      = [],
       essential         = true,
-      
+
       environment = [
         {
-            name = "aws_fluent_bit_init_s3_1",
-            value = "arn:aws:s3:::fluent-bit-yamada/extra.conf" 
+          name  = "aws_fluent_bit_init_s3_1",
+          value = "arn:aws:s3:::fluent-bit-yamada/extra.conf"
         }
-    ],
+      ],
 
       logConfiguration = {
         logDriver = "awslogs", # fluentbit自体のログはCloudWatch logsに出力
