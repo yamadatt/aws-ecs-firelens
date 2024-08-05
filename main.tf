@@ -47,15 +47,6 @@ module "sg" {
 
 
 
-module "natgw" {
-  source                  = "./modules/network/natgw"
-  env                     = local.env
-  name_prefix             = local.name_prefix
-  vpc_id                  = module.vpc.vpc_id
-  public_alb_subnet_1a_id = module.subnet.subnet_alb_1a_id
-  public_alb_subnet_1b_id = module.subnet.subnet_alb_1b_id
-}
-
 module "route_table" {
   source                         = "./modules/network/route_table"
   env                            = local.env
@@ -69,6 +60,27 @@ module "route_table" {
   public_alb_subnet_1b_id        = module.subnet.subnet_alb_1b_id
   igw_id                         = module.igw.igw_id
   nat_gw_id                      = module.natgw.nat_gw_id
+}
+
+
+module "ec2" {
+  source                = "./modules/ec2"
+  env                   = local.env
+  name_prefix           = local.name_prefix
+  vpc_id                = module.vpc.vpc_id
+  public_subnet_1a_id   = module.subnet.subnet_alb_1a_id
+  public_subnet_1b_id   = module.subnet.subnet_alb_1b_id
+  maintenance_ec2_sg_id = module.sg.maintenance_ec2_sg_id
+}
+
+
+module "natgw" {
+  source                  = "./modules/network/natgw"
+  env                     = local.env
+  name_prefix             = local.name_prefix
+  vpc_id                  = module.vpc.vpc_id
+  public_alb_subnet_1a_id = module.subnet.subnet_alb_1a_id
+  public_alb_subnet_1b_id = module.subnet.subnet_alb_1b_id
 }
 
 
@@ -105,8 +117,8 @@ module "ecs" {
 }
 
 module "firehose" {
-  source       = "./modules/firehose"
-  env          = local.env
-  name_prefix  = local.name_prefix
+  source            = "./modules/firehose"
+  env               = local.env
+  name_prefix       = local.name_prefix
   firehose_role_arn = module.iam_role.firehose_role_arn
 }
