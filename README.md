@@ -66,3 +66,32 @@ aws ecs register-task-definition --cli-input-json file://task-def.json
 ```bash
 aws ecs update-service --cluster stag-yamada-ecs --service stag-yamada-nginx-service --task-definition stag-yamada-nginx-def
 ```
+
+aws ecs execute-command
+
+aws ecs execute-command \
+--cluster stag-yamada-ecs \
+--task arn:aws:ecs:ap-northeast-1:449671225256:task/stag-yamada-ecs/607635599f4148c18bfe7f72774cb912 \
+--container log_router \
+--interactive \
+--command "kill -KILL -1" 
+
+
+
+aws ecs execute-command \
+  --cluster stag-yamada-ecs \
+  --task arn:aws:ecs:ap-northeast-1:449671225256:task/stag-yamada-ecs/57f00fb643c74df282b5187c938473d7 \
+  --container log_router \
+  --interactive \
+  --command "/bin/sh"
+
+
+aws ecs execute-command \
+--cluster stag-yamada-ecs \
+--task arn:aws:ecs:ap-northeast-1:449671225256:task/stag-yamada-ecs/a710f676562a4f5a8868003cb2ca5d1a \
+--container log_router \
+--interactive \
+--command "kill -SIGTERM 1"
+
+
+aws ecs list-tasks --cluster stag-yamada-ecs --service-name stag-yamada-nginx-service

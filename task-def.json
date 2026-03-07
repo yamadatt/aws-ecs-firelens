@@ -28,7 +28,11 @@
       "cpu": 0,
       "memoryReservation": 50,
       "portMappings": [],
-      "essential": true,
+      "restartPolicy": {
+        "enabled": true,
+        "ignoredExitCodes": [1],
+        "restartAttemptPeriod": 60
+      },
       "environment": [
         {
             "name": "aws_fluent_bit_init_s3_1",
@@ -50,8 +54,10 @@
           "awslogs-stream-prefix": "ecs"
         }
       },
-      "systemControls": []   
+      "systemControls": []
+
      }
+
   ],
   "family": "stag-yamada-nginx-def",
   "taskRoleArn": "arn:aws:iam::449671225256:role/ecsTaskRole-stag-yamada",
